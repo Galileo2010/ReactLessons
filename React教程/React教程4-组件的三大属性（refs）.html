@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='UTF-8' />
+        <title>React使用</title>
+        <script src='./src/react.development.js'></script>
+        <script src='./src/react-dom.development.js'></script>
+        <script src='./src/babel.min.js'></script>
+    </head>
+    <body>
+        <div id='demo'></div>
+        <script type='text/babel'>
+            // 1.定义组件
+            class MyComponent extends React.Component
+            {
+                constructor(props) {
+                    super(props);
+                    this.showInput = this.showInput.bind(this);
+                    this.handelBlur = this.handelBlur.bind(this);
+                }
+                
+                showInput(){
+                    var ipt1 = this.refs.ipt1;
+                    alert(ipt1.value);
+                    alert(this.input1.value);
+                }
+
+                handelBlur(event){
+                    alert(event.target.value);
+                }
+                render(){
+                    return (
+                        <div>
+                            <input type = "text" ref = "ipt1"/>
+                            <input type = "text" ref = {input => this.input1 = input}/>
+                            <button onClick = {this.showInput}>输入数据</button>
+                            <input ref = "ipt2" type = "text" placeholder = "失去焦点提示内容" onBlur = {this.handelBlur}/>
+                        </div> 
+                    );
+                }
+            }
+            // 2.渲染组件
+            ReactDOM.render(<MyComponent/>, document.getElementById('demo'));
+        </script>
+    </body>
+</html>

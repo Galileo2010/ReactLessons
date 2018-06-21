@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>React教程-组件的基本定义和使用</title>
+    <script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>
+    <script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js"></script>
+    <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="ex1"></div>
+  <div id="ex2"></div>
+  <script type="text/babel">
+  	// 1.创建组件
+    /*方法1：工厂函数，简单组件*/
+    function MyComponent() {
+        return <h1>方法1：工厂函数，简单组件</h1>;
+    }
+    /*方法2：ES6类组件，复杂组件*/
+    class MyComponent2 extends React.Component
+    {
+        render()
+        {
+            return <h2>方法2：ES6类组件，复杂组件</h2>;
+        }
+    }
+    // 2.渲染组件
+    ReactDOM.render(<MyComponent/>, document.getElementById('ex1'));
+    ReactDOM.render(<MyComponent2/>, document.getElementById('ex2'));
+  </script> 
+</body>
+
+</html>

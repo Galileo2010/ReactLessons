@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='UTF-8' />
+        <title>React使用</title>
+        <script crossorigin src='https://unpkg.com/react@16/umd/react.development.js'></script>
+        <script crossorigin src='https://unpkg.com/react-dom@16/umd/react-dom.development.js'></script>
+        <script src='https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js'></script>
+        <script src='https://unpkg.com/prop-types@15.6/prop-types.js'></script>
+    </head>
+    <body>
+        <div id='demo'></div>
+        <script type='text/babel'>
+        /*
+            问题1：数据该放在哪个组件？
+                    看数据是某个组件（给该组件）需要他还是某些组件（给父组件）需要他；
+            问题2：需要在子组件中改变父组件的状态？ 
+                    （1）子组件不能直接改变父组件的状态；
+                    （2）状态在哪个组件，更新状态的行为就定义在哪个组件；
+                    （3）解决方法：父组件定义函数，传递给子组件，子组件调用；
+        */
+            // 1.定义组件
+            class APP extends React.Component
+            {
+                constructor(props) {
+                    super(props);
+                    // 初始化数据
+                    this.state = {
+                        names:['luoxiaojun','yukun','fuzhejiang']
+                    }
+                    this.add = this.add.bind(this)
+                }
+
+                add(name)
+                {
+                    this.state.names.unshift(name)
+                    this.setState(this.state.names)
+                }
+
+                render(){
+                    return (
+                        <div>
+                            <h1>Simple TODO List</h1>
+                            <AddName counter = {this.state.names.length} add = {this.add}/>
+                            <List names = {this.state.names}/>
+                        </div>
+                    );
+                }
+            }
+
+            class AddName extends React.Component{
+                constructor(props) {
+                    super(props)
+                    this.add = this.add.bind(this)
+                }
+
+                add(){
+                    var str = this.input.value;
+                    if (!str) return;
+                    this.props.add(str);
+                    this.input.value ='';
+                }
+
+                render(){
+                    return(
+                        <div>
+                        <input type = "text" ref = {input => this.input = input}/>
+                        <button onClick = {this.add}>添加：#{this.props.counter + 1}</button>
+                        </div>
+                    );
+                }
+            }
+
+            AddName.propTypes = {
+                counter: PropTypes.number.isRequired,
+                add: PropTypes.func.isRequired,
+            }
+
+            class List extends React.Component{
+                render(){
+                    return( 
+                        <ul>
+                            {this.props.names.map((name,index) => <li key = { index}>{name}</li>)}
+                        </ul>
+                    );
+                }
+               
+            }
+
+             List.propTypes = {
+                    names:PropTypes.array.isRequired
+            }
+            // 2.渲染组件
+            ReactDOM.render(<APP/>, document.getElementById('demo'));
+        </script>
+    </body>
+</html>

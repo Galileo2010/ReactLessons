@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>React教程0-虚拟DOM的创建和渲染</title>
+    <script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>
+    <script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js"></script>
+    <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="demo1"></div>
+  <script type="text/babel">
+  	// 将数据的数组转换成标签的数组
+    // 1.创建虚拟DOM
+    var names = ['骆小俊','伏浙江','余坤','朱行兵','刘亚豪'];
+    var vDom = 	<div>
+    				<button>this is a button</button>
+    				<button>this is another button</button>
+    				<ul>{names.map((name, index) => <li key = {index}>{name}</li>)}</ul>
+    				
+    			</div>;
+    // 2.渲染虚拟dom
+    ReactDOM.render(vDom, document.getElementById("demo1"));
+  </script> 
+</body>
+
+</html>
