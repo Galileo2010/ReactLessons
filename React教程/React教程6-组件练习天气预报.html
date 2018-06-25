@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='UTF-8' />
+        <title>React使用-天气预报</title>
+        <script crossorigin src='https://unpkg.com/react@16/umd/react.development.js'></script>
+        <script crossorigin src='https://unpkg.com/react-dom@16/umd/react-dom.development.js'></script>
+        <script src='https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js'></script>
+        <script src='https://unpkg.com/prop-types@15.6/prop-types.js'></script>
+        <script src="https://cdn.bootcss.com/axios/0.18.0/axios.js"></script>
+    </head>
+    
+    <body>
+        <div id='demo'></div>
+        <script type='text/babel'>
+            // 1.组件划分<App <SearchInput/><SearchResult/>/>
+            class App extends React.Component{
+
+                state = {
+                    searchName:''
+                }
+
+                onSetSearchName = (name)=>{
+                    
+                    this.state.searchName = name
+                    this.setState(this.state)
+                }
+                render(){
+                    return (<div>
+                        <SearchInput onSetSearchName = {this.onSetSearchName}/>
+                        <SearchResult searchName = {this.state.searchName}/>
+                    </div>)
+                }
+            }
+            class SearchInput extends React.Component{
+
+                static propTypes ={
+                    onSetSearchName: PropTypes.func.isRequired
+                }
+
+                handleClick = ()=>{
+                    const name = this.input.value
+                    this.props.onSetSearchName(name)
+                }
+                render(){
+                    return (<div>
+                        <input ref = {input => this.input = input}/>
+                        <button onClick = {this.handleClick}>Search</button>
+                    </div>)
+                }
+            }
+            class SearchResult extends React.Component{
+                static propTypes ={
+                    searchName: PropTypes.string.isRequired
+                }
+
+                state = {
+                    searchName:'',
+                    resultData:[]
+                }
+
+                componentWillReceiveProps(nextProps){
+                    if (this.state.searchName === nextProps.searchName) return
+                    this.state.searchName = nextProps.searchName
+                    const url = "https://www.sojson.com/open/api/weather/json.shtml?city="+ this.state.searchName
+                    
+                    axios.get(url).then(response =>{
+                        const strData = response.request.response
+                        const jsonData = eval('(' + strData + ')')
+                         this.setState({
+                     searchName:this.state.searchName,
+                    resultData:jsonData.data.forecast
+                })
+                    }).catch(error =>{console.log("fuckerror")})
+                }
+
+                render(){
+                    if(this.state.searchName ==='')
+                        return (<h1>请在输入框中输入需要搜索的数据...</h1>)
+                    else
+                        return ( <ul>
+                        {this.state.resultData.map((item, index) => <li key = {index}>日期：{item.date} 天气：{item.type} 最高温：{item.high} 最低温：{item.low}</li>)}
+                            </ul>)
+                }
+            }
+
+            ReactDOM.render(<App/>, document.getElementById('demo'))
+        </script>
+    </body>
+    <style>
+        input{
+                width:400px;
+                height: 40px;
+                font-size:28px;
+                border-radius: 6px;
+        }
+        button{
+                width:100px;
+                height: 40px;
+                font-size:28px;
+                border-radius: 6px;
+        }
+    </style>
+</html>
