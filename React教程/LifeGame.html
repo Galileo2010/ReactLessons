@@ -57,13 +57,29 @@
                     for (let i = 0; i < height; i++) {
                         for (let j = 0; j < width; j++) {
                             canvasCtx.fillStyle = (ages[i][j] === 1) ? "#0000ff" : "#000000";
-                            this.DrawReact(canvasCtx, j * cellWidth, i * cellHeight, cellWidth, cellHeight)  
+                            this.DrawReact(canvasCtx, j * cellWidth, i * cellHeight, cellWidth, cellHeight)
+                            //debugger  
                         }
                     }                    
                 }
 
                 DrawReact = (canvasCtx, left, top, width, height)=> {
                     canvasCtx.fillRect(left, top, width, height);
+                }
+
+                handleClick = (event) =>{
+                    let ev = event||window.event;
+                    let x = ev.clientX-ev.target.offsetLeft;
+                    let y = ev.clientY-ev.target.offsetTop;
+                    let cellWidth = ev.target.width / this.state.size.width;
+                    let cellHeight = ev.target.height / this.state.size.height;
+
+                    let i = parseInt(y / cellHeight);
+                    let j = parseInt(x / cellWidth);
+                    let {size,ages} = this.state;
+                    ages[i][j] = 1;
+                    console.log(i+" "+ j);
+                    this.setState({size:size,ages:ages})
                 }
 
                  componentDidMount(){
@@ -73,26 +89,26 @@
                         let height = size[1];
                         console.log(size[0]);
                         console.log(size[1]);
-                        
+                        []
                         let ages = new Array(height)
                         for(var i=0;i<height;i++){        //一维长度为i,i为变量，可以根据实际情况改变  
                             ages[i]=new Array(width);    //声明二维，每一个一维数组里面的一个元素都是一个数组
                         }
-                        console.log(ages)
                         this.setState({
                             size:{
                                 width,height
                             },
                             ages:ages
-                        })        
+                        })
+                        this.DrawReacts("mycanvas")        
                     })
-                     this.DrawReacts("mycanvas")
+                    this.DrawReacts("mycanvas")
                  }
 
                 render(){
                     return (<div>
                         <SetGame/>
-                        <canvas id = "mycanvas" width="500" height="500"></canvas>
+                        <canvas id = "mycanvas" width="500" height="500" onClick = {this.handleClick}></canvas>
                     </div>)
                 }
             }
