@@ -44,6 +44,19 @@
                     })               
                 }
 
+                getNewAge = (i, j)=>{
+                    //计算新细胞状态
+                }
+                updateAges = ()=>{
+                    let oldAges = this.state.ages;
+                    let newAges = oldAges;
+                    for (let i = 0; i < oldAges.length; i++) {
+                        for (let j = 0; j < oldAges[i].length; j++) {
+                            
+                        }
+                    }
+                }
+
                 DrawReacts = (id) =>{
                     let width = this.state.size.width;
                     let height = this.state.size.height;
@@ -80,6 +93,7 @@
                     ages[i][j] = 1;
                     console.log(i+" "+ j);
                     this.setState({size:size,ages:ages})
+                    this.DrawReacts("mycanvas")
                 }
 
                  componentDidMount(){
