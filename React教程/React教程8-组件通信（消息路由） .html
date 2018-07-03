@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='UTF-8' />
+        <title>React使用-天气预报(消息路由)</title>
+        <script crossorigin src='https://unpkg.com/react@16/umd/react.development.js'></script><!--react库-->
+        <script crossorigin src='https://unpkg.com/react-dom@16/umd/react-dom.development.js'></script><!--ReactDom库-->
+        <script src='https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js'></script><!--Babel-->
+        <script src="https://cdn.bootcss.com/axios/0.18.0/axios.js"></script><!--网络请求-->
+        <script src="https://cdn.bootcss.com/pubsub-js/1.6.0/pubsub.js"></script><!--消息路由-->
+    </head>
+    
+    <body>
+        <div id='demo'></div>
+        <script type='text/babel'>
+            // 1.组件划分<App <SearchInput/><SearchResult/>/>
+            class App extends React.Component{
+                render(){
+                    return (<div>
+                        <SearchInput/>
+                        <SearchResult/>
+                    </div>)
+                }
+            }
+            class SearchInput extends React.Component{
+                handleClick = ()=>{
+                    // 发布消息，触发消息
+                    PubSub.publish( 'search', this.input.value)
+                }
+                render(){
+                    return (<div>
+                        <input ref = {input => this.input = input}/>
+                        <button onClick = {this.handleClick}>Search</button>
+                    </div>)
+                }
+            }
+            class SearchResult extends React.Component{
+                state = {resultData:[]}
+                componentDidMount(){
+                    // 订阅消息，注册消息
+                    PubSub.subscribe( 'search', ( message, searchName )=>{  
+                    const url = "https://www.sojson.com/open/api/weather/json.shtml?city="+ searchName
+                    axios.get(url).then(response =>{
+                        const strData = response.request.response
+                        const jsonData = eval('(' + strData + ')')
+                         this.setState({resultData:jsonData.data.forecast})
+                    }).catch(error =>{console.log("fuckerror")})} ); 
+                }
+
+                render(){
+                    if(this.state.resultData.length === 0)
+                        return (<h1>请在输入框中输入有效的地名...</h1>)
+                    else
+                        return ( <ul>
+                        {this.state.resultData.map((item, index) => <li key = {index}>
+                            <p>日期：{item.date}</p>
+                            <p>天气：{item.type}</p>
+                            <p>气温：{item.high}-{item.low}</p>
+                            </li>)}
+                            </ul>)
+                }
+            }
+
+            ReactDOM.render(<App/>, document.getElementById('demo'))
+        </script>
+    </body>
+    <style>
+        input{
+                width:400px;
+                height: 40px;
+                font-size:28px;
+                border-radius: 6px;
+        }
+        button{
+                width:100px;
+                height: 40px;
+                font-size:28px;
+                border-radius: 6px;
+        }
+        p{
+            font-size:18px;
+        }
+    </style>
+</html>

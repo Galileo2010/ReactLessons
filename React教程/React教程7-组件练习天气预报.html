@@ -8,6 +8,7 @@
         <script src='https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js'></script>
         <script src='https://unpkg.com/prop-types@15.6/prop-types.js'></script>
         <script src="https://cdn.bootcss.com/axios/0.18.0/axios.js"></script>
+        <script src="https://cdn.bootcss.com/fetch-jsonp/1.1.3/fetch-jsonp.js"></script>
     </head>
     
     <body>
@@ -79,7 +80,11 @@
                         return (<h1>请在输入框中输入需要搜索的数据...</h1>)
                     else
                         return ( <ul>
-                        {this.state.resultData.map((item, index) => <li key = {index}>日期：{item.date} 天气：{item.type} 最高温：{item.high} 最低温：{item.low}</li>)}
+                        {this.state.resultData.map((item, index) => <li key = {index}>
+                            <p>日期：{item.date}</p>
+                            <p>天气：{item.type}</p>
+                            <p>气温：{item.high}-{item.low}</p>
+                            </li>)}
                             </ul>)
                 }
             }
@@ -99,6 +104,9 @@
                 height: 40px;
                 font-size:28px;
                 border-radius: 6px;
+        }
+        p{
+            font-size:18px;
         }
     </style>
 </html>

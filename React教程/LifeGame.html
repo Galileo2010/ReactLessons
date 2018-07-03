@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='UTF-8' />
+    <title>生命游戏</title>
+    <script crossorigin src='https://unpkg.com/react@16/umd/react.development.js'></script><!--react库-->
+    <script crossorigin src='https://unpkg.com/react-dom@16/umd/react-dom.development.js'></script><!--ReactDom库-->
+    <script src='https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js'></script><!--Babel-->
+    <script src="https://cdn.bootcss.com/pubsub-js/1.6.0/pubsub.js"></script><!--消息路由-->
+</head>
+
+<body>
+    <div id='demo'></div>
+    <script type='text/babel'>
+            // 1.组件划分<App <SetGame/><ShowGame/>/>
+            class App extends React.Component{
+
+                state = {
+                    size:{
+                        width:0,
+                        height:0
+                    },
+                    ages:[]
+                }
+
+                componentWillMount() {
+                    let width = 10;
+                    let height = 10;
+                    let ages = new Array(height)
+                    for(var i=0;i<height;i++){        //一维长度为i,i为变量，可以根据实际情况改变  
+                        ages[i]=new Array(width);    //声明二维，每一个一维数组里面的一个元素都是一个数组
+                    }
+                    ages[1][2] = 1
+                    ages[0][0] = 1
+                    ages[1][1] = 1
+                    ages[3][5] = 1
+
+                    console.log(ages)
+                    this.setState({
+                        size:{
+                            width,height
+                        },
+                        ages:ages
+                    })               
+                }
+
+                DrawReacts = (id) =>{
+                    let width = this.state.size.width;
+                    let height = this.state.size.height;
+                    let ages = this.state.ages;
+                     var canvas = document.getElementById(id);
+                    var canvasCtx = canvas.getContext("2d");
+                    
+                    let cellWidth = canvas.width / width;
+                    let cellHeight = canvas.height / height;
+                    
+                    for (let i = 0; i < height; i++) {
+                        for (let j = 0; j < width; j++) {
+                            canvasCtx.fillStyle = (ages[i][j] === 1) ? "#0000ff" : "#000000";
+                            this.DrawReact(canvasCtx, j * cellWidth, i * cellHeight, cellWidth, cellHeight)  
+                        }
+                    }                    
+                }
+
+                DrawReact = (canvasCtx, left, top, width, height)=> {
+                    canvasCtx.fillRect(left, top, width, height);
+                }
+
+                 componentDidMount(){
+                    // 订阅消息，注册消息
+                    PubSub.subscribe( 'setSize', ( message, size )=>{
+                        let width = size[0];
+                        let height = size[1];
+                        console.log(size[0]);
+                        console.log(size[1]);
+                        
+                        let ages = new Array(height)
+                        for(var i=0;i<height;i++){        //一维长度为i,i为变量，可以根据实际情况改变  
+                            ages[i]=new Array(width);    //声明二维，每一个一维数组里面的一个元素都是一个数组
+                        }
+                        console.log(ages)
+                        this.setState({
+                            size:{
+                                width,height
+                            },
+                            ages:ages
+                        })        
+                    })
+                     this.DrawReacts("mycanvas")
+                 }
+
+                render(){
+                    return (<div>
+                        <SetGame/>
+                        <canvas id = "mycanvas" width="500" height="500"></canvas>
+                    </div>)
+                }
+            }
+            class SetGame extends React.Component{
+                handleClick = ()=>{
+                    let size = [this.input1.value * 1, this.input2.value * 1]
+                    PubSub.publish( 'setSize', size)
+                    console.log(size)
+                }
+                render(){
+                    return (<div>
+                    <a>设置width</a>
+                    <input ref = {input => this.input1 = input}/>
+                    <a>设置height</a>
+                    <input ref = {input => this.input2 = input}/>
+
+                    <button onClick = {this.handleClick}>修改尺寸</button>
+                    <br/>
+                    <button onClick = {this.handleClick}>单步演化</button>
+                    <button onClick = {this.handleClick}>自动演化</button>
+                    </div>)
+                }
+            }
+            ReactDOM.render(<App/>, document.getElementById('demo'))
+        </script>
+
+        <script>
+
+           
+        </script>
+</body>
+<style>
+canvas{
+   
+    background-color:darkgray; /* 6217002870060500335 */
+}
+</style>
+</html>
