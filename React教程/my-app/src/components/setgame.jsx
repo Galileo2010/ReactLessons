@@ -75,7 +75,7 @@ export default class SetGame extends Component {
         let colorAuto = (this.state.autoEvolution === true) ? "blue" : "#ffffff";
         return (<div>
             <Button type="ghost" style={{ backgroundColor: colorStep }} onClick={this.stepEvolution}>单步演化</Button>
-            <WhiteSpace size="md"/>
+            <WhiteSpace size="xs"/>
             <Button type="ghost" style={{ backgroundColor: colorAuto }} onClick={this.setAutoEvolution}>自动演化</Button>
             <WingBlank size="lg">
                 <p className="sub-title">尺寸 : {this.state.size + "×" + this.state.size}</p>
