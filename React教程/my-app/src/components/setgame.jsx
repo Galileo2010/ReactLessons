@@ -14,6 +14,13 @@ export default class SetGame extends Component {
     // 设置细胞数
     setSize = (value) => {
         let { autoEvolution, speed, size } = this.state;
+       
+        // 设置细胞数目后应清除定时器
+        if (autoEvolution === true) {
+            clearInterval(this.timerID);
+            this.timerID = undefined
+            autoEvolution = false;
+        }
         size = value;
         this.setState({
             autoEvolution: autoEvolution,

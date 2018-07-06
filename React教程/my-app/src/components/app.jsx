@@ -26,7 +26,6 @@ export default class App extends Component{
     componentDidMount() {
         // 订阅消息，注册消息
         PubSub.subscribe('setSize', (message, size) => {
-            console.log(size);
             let ages = new Array(size)
             for (var i = 0; i < size; i++) {        //一维长度为i,i为变量，可以根据实际情况改变  
                 ages[i] = new Array(size);    //声明二维，每一个一维数组里面的一个元素都是一个数组
@@ -118,10 +117,12 @@ export default class App extends Component{
         for (let i = 0; i < size; i++) {
             for (let j = 0; j < size; j++) {
                 if (ages[i][j] === undefined) canvasCtx.fillStyle = "#e6e6e6";
-                else if (ages[i][j] === 1) canvasCtx.fillStyle = "#00ffff";
-                else if (ages[i][j] === 2) canvasCtx.fillStyle = "#0066ff";
-                else if (ages[i][j] === 3) canvasCtx.fillStyle = "#0000ff";
-                else canvasCtx.fillStyle = "#0000ff";
+                else if (ages[i][j] === 1) canvasCtx.fillStyle = "#FEEC5A";
+                else if (ages[i][j] === 2) canvasCtx.fillStyle = "#FFBB5C";
+                else if (ages[i][j] === 3) canvasCtx.fillStyle = "#FF844E";
+                else if (ages[i][j] === 4) canvasCtx.fillStyle = "#FF4843";
+                else if (ages[i][j] === 5) canvasCtx.fillStyle = "#D4405A";
+                else canvasCtx.fillStyle = "#D4405A";
                 canvasCtx.fillRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight)
             }
         }
